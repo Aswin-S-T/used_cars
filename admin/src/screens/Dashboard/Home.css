@@ -1,0 +1,41 @@
+.vertical-tabs {
+    display: flex;
+
+  }
+  
+  .vertical-tablist {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+    background-color: whitesmoke;
+    min-height: 100vh;
+    min-width: 200px;
+    color: grey;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    flex-direction: space-between;
+    padding: 10px;
+    font-size: 15px;
+    padding: 8px;
+
+  }
+  
+  .vertical-tablist .react-tabs__tab {
+    margin-bottom: 10px;
+  }
+  
+  .react-tabs__tab--selected {
+    background-color: #fff;
+    border: none;
+    /* padding: 8px; */
+    /* color: #296FB6; */
+    color: darkcyan;
+  }
+  
+  .icon_medium{
+    font-size: 50px;
+    top: 5px;
+    position: relative;
+    /* color: #296FB6; */
+    color: darkcyan;
+  }
