@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -182,13 +182,23 @@ const vehicles = [
   // Add more sample data as needed
 ];
 
-function ListVehicles() {
+function ListVehicles({ currentScreen, setCurrentScreen }) {
+  const [view, setView] = useState("list");
   const [sortDirection, setSortDirection] = useState("asc");
   const [sortColumn, setSortColumn] = useState("make");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredVehicles, setFilteredVehicles] = useState(vehicles);
   const [priceRange, setPriceRange] = useState([0, 30000]);
   const [selectedModel, setSelectedModel] = useState("");
+
+  useEffect(() => {
+    if (view === "view") {
+      setCurrentScreen(" > View Details");
+    } else {
+      setCurrentScreen("");
+    }
+  }, [view, setCurrentScreen]);
+
   const [dateRange, setDateRange] = useState([
     new Date("2023-01-01"),
     new Date(),
@@ -269,192 +279,200 @@ function ListVehicles() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StyledContainer maxWidth="lg" style={{ marginTop: "5px" }}>
-        <StyledTitle
-          variant="h4"
-          style={{ textAlign: "left", color: "darkcyan" }}
-        >
-          All Vehicles
-        </StyledTitle>
-        <StyledPaper>
-          <FilterSection container spacing={2}>
-            <FilterItem item>
-              <StyledTextField
-                label="Search Vehicles"
-                variant="outlined"
-                size="small"
-                value={searchTerm}
-                onChange={handleSearch}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </FilterItem>
-            <FilterItem item>
-              <FilterFormControl size="small" fullWidth variant="outlined">
-                <Select
-                  value={selectedModel}
-                  onChange={handleModelChange}
-                  displayEmpty
-                  inputProps={{ "aria-label": "Filter by Model" }}
-                >
-                  <MenuItem value="">All Models</MenuItem>
-                  <MenuItem value="Camry">Camry</MenuItem>
-                  <MenuItem value="Accord">Accord</MenuItem>
-                  <MenuItem value="Mustang">Mustang</MenuItem>
-                </Select>
-              </FilterFormControl>
-            </FilterItem>
-            <FilterItem item>
-              <Typography gutterBottom>Price Range</Typography>
-              <Slider
-                value={priceRange}
-                onChange={handlePriceChange}
-                valueLabelDisplay="auto"
-                min={0}
-                max={30000}
-                step={1000}
-                marks
-                sx={{ mb: 2 }}
-                size="small"
-              />
-            </FilterItem>
-            <FilterItem item>
-              <Typography gutterBottom>Added Date Range</Typography>
-              <TextField
-                type="date"
-                size="small"
-                value={dateRange[0].toISOString().split("T")[0]}
-                onChange={(e) =>
-                  handleDateChange({
-                    target: { value: [e.target.value, dateRange[1]] },
-                  })
-                }
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                sx={{ mb: 1 }}
-              />
-              <TextField
-                type="date"
-                size="small"
-                value={dateRange[1].toISOString().split("T")[0]}
-                onChange={(e) =>
-                  handleDateChange({
-                    target: { value: [dateRange[0], e.target.value] },
-                  })
-                }
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-              />
-            </FilterItem>
-            <FilterItem item>
-              <StyledButton
-                variant="contained"
-                style={{ backgroundColor: "darkcyan" }}
-                startIcon={<Refresh />}
-                onClick={handleRefresh}
-              >
-                Refresh
-              </StyledButton>
-            </FilterItem>
-          </FilterSection>
-          <StyledTableContainer component={Paper}>
-            <Table>
-              <TableHead style={{ backgroundColor: "darkcyan" }}>
-                <StyledTableHeader style={{ backgroundColor: "darkcyan" }}>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "make"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("make")}
-                      style={{ color: "#FFF" }}
+      {console.log("view------------", view)}
+      {view == "list" && (
+        <>
+          <StyledContainer maxWidth="lg" style={{ marginTop: "5px" }}>
+            <StyledTitle
+              variant="h4"
+              style={{ textAlign: "left", color: "darkcyan" }}
+            >
+              All Vehicles
+            </StyledTitle>
+            <StyledPaper>
+              <FilterSection container spacing={2}>
+                <FilterItem item>
+                  <StyledTextField
+                    label="Search Vehicles"
+                    variant="outlined"
+                    size="small"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Search />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </FilterItem>
+                <FilterItem item>
+                  <FilterFormControl size="small" fullWidth variant="outlined">
+                    <Select
+                      value={selectedModel}
+                      onChange={handleModelChange}
+                      displayEmpty
+                      inputProps={{ "aria-label": "Filter by Model" }}
                     >
-                      Make
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "model"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("model")}
-                      style={{ color: "#FFF" }}
-                    >
-                      Model
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "year"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("year")}
-                      style={{ color: "#FFF" }}
-                    >
-                      Year
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "color"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("color")}
-                      style={{ color: "#FFF" }}
-                    >
-                      Color
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "mileage"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("mileage")}
-                      style={{ color: "#FFF" }}
-                    >
-                      Mileage
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell>
-                    <TableSortLabel
-                      active={sortColumn === "price"}
-                      direction={sortDirection}
-                      onClick={() => handleSort("price")}
-                      style={{ color: "#FFF" }}
-                    >
-                      Price
-                    </TableSortLabel>
-                  </TableCell>
-                </StyledTableHeader>
-              </TableHead>
-              <TableBody>
-                {filteredVehicles
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((vehicle) => (
-                    <StyledTableRow key={vehicle.id}>
-                      <TableCell>{vehicle.make}</TableCell>
-                      <TableCell>{vehicle.model}</TableCell>
-                      <TableCell>{vehicle.year}</TableCell>
-                      <TableCell>{vehicle.color}</TableCell>
-                      <TableCell>{vehicle.mileage} km</TableCell>
-                      <TableCell>${vehicle.price}</TableCell>
-                    </StyledTableRow>
-                  ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={filteredVehicles.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-            />
-          </StyledTableContainer>
-        </StyledPaper>
-      </StyledContainer>
+                      <MenuItem value="">All Models</MenuItem>
+                      <MenuItem value="Camry">Camry</MenuItem>
+                      <MenuItem value="Accord">Accord</MenuItem>
+                      <MenuItem value="Mustang">Mustang</MenuItem>
+                    </Select>
+                  </FilterFormControl>
+                </FilterItem>
+                <FilterItem item>
+                  <Typography gutterBottom>Price Range</Typography>
+                  <Slider
+                    value={priceRange}
+                    onChange={handlePriceChange}
+                    valueLabelDisplay="auto"
+                    min={0}
+                    max={30000}
+                    step={1000}
+                    marks
+                    sx={{ mb: 2 }}
+                    size="small"
+                  />
+                </FilterItem>
+                <FilterItem item>
+                  <Typography gutterBottom>Added Date Range</Typography>
+                  <TextField
+                    type="date"
+                    size="small"
+                    value={dateRange[0].toISOString().split("T")[0]}
+                    onChange={(e) =>
+                      handleDateChange({
+                        target: { value: [e.target.value, dateRange[1]] },
+                      })
+                    }
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ mb: 1 }}
+                  />
+                  <TextField
+                    type="date"
+                    size="small"
+                    value={dateRange[1].toISOString().split("T")[0]}
+                    onChange={(e) =>
+                      handleDateChange({
+                        target: { value: [dateRange[0], e.target.value] },
+                      })
+                    }
+                    fullWidth
+                    InputLabelProps={{ shrink: true }}
+                  />
+                </FilterItem>
+                <FilterItem item>
+                  <StyledButton
+                    variant="contained"
+                    style={{ backgroundColor: "darkcyan" }}
+                    startIcon={<Refresh />}
+                    onClick={handleRefresh}
+                  >
+                    Refresh
+                  </StyledButton>
+                </FilterItem>
+              </FilterSection>
+              <StyledTableContainer component={Paper}>
+                <Table>
+                  <TableHead style={{ backgroundColor: "darkcyan" }}>
+                    <StyledTableHeader style={{ backgroundColor: "darkcyan" }}>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "make"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("make")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Make
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "model"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("model")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Model
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "year"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("year")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Year
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "color"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("color")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Color
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "mileage"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("mileage")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Mileage
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell>
+                        <TableSortLabel
+                          active={sortColumn === "price"}
+                          direction={sortDirection}
+                          onClick={() => handleSort("price")}
+                          style={{ color: "#FFF" }}
+                        >
+                          Price
+                        </TableSortLabel>
+                      </TableCell>
+                    </StyledTableHeader>
+                  </TableHead>
+                  <TableBody>
+                    {filteredVehicles
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((vehicle) => (
+                        <StyledTableRow key={vehicle.id}>
+                          <TableCell>{vehicle.make}</TableCell>
+                          <TableCell>{vehicle.model}</TableCell>
+                          <TableCell>{vehicle.year}</TableCell>
+                          <TableCell>{vehicle.color}</TableCell>
+                          <TableCell>{vehicle.mileage} km</TableCell>
+                          <TableCell>${vehicle.price}</TableCell>
+                        </StyledTableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={filteredVehicles.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleRowsPerPageChange}
+                />
+              </StyledTableContainer>
+            </StyledPaper>
+          </StyledContainer>
+        </>
+      )}
     </ThemeProvider>
   );
 }

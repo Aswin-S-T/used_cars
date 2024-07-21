@@ -10,41 +10,50 @@ import Customers from "../Customers/Customers";
 import AddVehicle from "../AddVehicle/AddVehicle";
 import AddIcon from "@mui/icons-material/Add";
 import ListVehicles from "../ListVehicles/ListVehicles";
+import Header from "../../components/Header/Header";
 function Home() {
   const [breadcrumb, setBreadcrumb] = useState("");
-
+  const [currentScreen, setCurrentScreen] = useState("");
   return (
-    <Tabs className="vertical-tabs">
-      <TabList className="vertical-tablist">
-        <Tab>
-          <DashboardIcon className="icon_medium" /> Dashboard
-        </Tab>
-        <Tab>
-          <PeopleIcon className="icon_medium" /> Customers
-        </Tab>
-        <Tab>
-          <PeopleIcon className="icon_medium" /> All vechicles
-        </Tab>
-        <Tab>
-          <AddIcon className="icon_medium" /> Add Items
-        </Tab>
-      </TabList>
+    <>
+      <header>
+        <Header />
+      </header>
+      <Tabs className="vertical-tabs">
+        <TabList className="vertical-tablist">
+          <Tab>
+            <DashboardIcon className="icon_medium" /> Dashboard
+          </Tab>
+          <Tab>
+            <PeopleIcon className="icon_medium" /> Customers
+          </Tab>
+          <Tab>
+            <PeopleIcon className="icon_medium" /> All vechicles
+          </Tab>
+          <Tab>
+            <AddIcon className="icon_medium" /> Add Items
+          </Tab>
+        </TabList>
 
-      <div style={{ width: "100%" }}>
-        <TabPanel>
-          <HomeScreen />
-        </TabPanel>
-        <TabPanel>
-          <Customers breadcrumb={breadcrumb} setBreadcrumb={setBreadcrumb} />
-        </TabPanel>
-        <TabPanel>
-          <ListVehicles />
-        </TabPanel>
-        <TabPanel>
-          <AddVehicle />
-        </TabPanel>
-      </div>
-    </Tabs>
+        <div style={{ width: "100%" }}>
+          <TabPanel>
+            <HomeScreen />
+          </TabPanel>
+          <TabPanel>
+            <Customers breadcrumb={breadcrumb} setBreadcrumb={setBreadcrumb} />
+          </TabPanel>
+          <TabPanel>
+            <ListVehicles
+              currentScreen={currentScreen}
+              setCurrentScreen={setCurrentScreen}
+            />
+          </TabPanel>
+          <TabPanel>
+            <AddVehicle />
+          </TabPanel>
+        </div>
+      </Tabs>
+    </>
   );
 }
 

@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./screens/Dashboard/Home";
 import Header from "./components/Header/Header";
 import CustomerDetails from "./screens/CustomerDetails/CustomerDetails";
+import LoginScreen from "./screens/Auth/LoginScreen";
+import RegisterScreen from "./screens/Auth/RegisterScreen";
 function App() {
   const [customer, setCustomer] = useState({
     id: 1,
@@ -20,11 +22,10 @@ function App() {
   });
   return (
     <BrowserRouter>
-      <header>
-        <Header />
-      </header>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/register" element={<RegisterScreen />} />
         <Route
           path="/details"
           element={<CustomerDetails customer={customer} />}
